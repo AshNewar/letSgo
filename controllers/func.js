@@ -14,7 +14,10 @@ export const isAuthenticated=async(req,res,next)=>{
             next();
         }
         else{
-            res.sendFile(path.join(loc,"./index.html"));
+            res.status(404).json({
+                success:false,
+                msg:"Login First",
+            });
         }
             
     } catch (error) {
@@ -38,8 +41,10 @@ export const Userdata=async(req,res)=>{
     }
 }
 export const Userrequest=(req,res)=>{
-    res.sendFile(path.join(loc,"/public/logot.html"));
-    console.log(req.cookies);
+    res.status(202).json({
+        success:true,
+        msg:"User Logged In",
+    })
 }
 
 
@@ -50,20 +55,20 @@ export const UserlogOut=(req,res)=>{
         sameSite:process.env.NODE_URI==="Development"?"lax":"none",
         secure:process.env.NODE_URI==="Development"?false:true,
     });
-    res.redirect("/");
+    res.status(202).json({
+        success:true,
+        msg:"Logged Out Successfully",
+    });
 };
 export const UserId=async(req,res)=>{
     try {
-        const {id}=req.params;
-        const user=await User.find({_id:id});
-        res.json({
+        res.status(200).json({
             success:true,
-            user,
+            user:req.user,
         })
         
     } catch (error) {
         console.log(error);
-        console.log("eror2");
         
     }
     
@@ -71,22 +76,17 @@ export const UserId=async(req,res)=>{
 
 export const UserSignup=async(req,res)=>{
     try {
-        const {name,password}=req.body;
-    const item=await User.findOne({name});
+        const {name,email,password}=req.body;
+    const item=await User.findOne({name:name,email:email});
     console.log(item);
     if(item){
-        const isMatch=bcrypt.compare(item.password,password);
-        if(isMatch){
-            return res.status(404).json({
-                success:false,
-                message:"User Already Exist",
-            })
-        //   return res.redirect("/");
-        }
+        return res.status(404).json({
+            success:false,
+            message:"User Already Exist",
+        })
     }
     const hashpassword=await bcrypt.hash(password,15);
-    console.log(hashpassword);
-    const user=await User.create({name:name,password:hashpassword});
+    const user=await User.create({name:name,email:email,password:hashpassword});
     res.status(201).cookie("token",user._id,{
         httpOnly:true,
         expires:new Date(Date.now()+(60*1000)),
@@ -105,11 +105,14 @@ export const UserSignup=async(req,res)=>{
 }
 export const Userlogin=async(req,res)=>{
     try {
-        const {name,password}=req.body;
-    const item=await User.findOne({name});
+        const {email,password}=req.body;
+    const item=await User.findOne({email:email,password:password});
     console.log(item);
     if(!item){
-        return res.redirect("/signup");
+        return res.status(404).json({
+            success:true,
+            msg:"SignUp First",
+        });
     }
     else{
         const isMatch=await bcrypt.compare(password,item.password);
@@ -122,25 +125,21 @@ export const Userlogin=async(req,res)=>{
                 secure:process.env.NODE_URI==="Development"?false:true,
             });
             const loc=path.resolve();
-            res.sendFile(path.join(loc,"./public/logot.html"));
+            res.status(202).json({
+                success:true,
+                msg:"User Logged In"
+            });
         }
         else{
             res.status(404).json({
                 success:false,
                 msg:"Invalid password",
             })
-            // res.redirect("/signup");
-        }
-
-        
+        } 
     }
-        
     } catch (error) {
         console.log(error);
         
     }
-    
-    
-    
 
 }

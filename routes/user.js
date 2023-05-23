@@ -6,28 +6,21 @@ import { UserId,UserSignup,Userdata,UserlogOut,Userlogin,Userrequest,isAuthentic
 
 const router =express.Router();
 
-router.get("/",isAuthenticated,Userrequest);
-
-
 //get Area
 router.get("/user/all",Userdata);
 
-router.get("/signup",(req,res)=>{
-    const loc=path.resolve();
-    res.sendFile(path.join(loc,"./public/signup.html"));
-});
 
-router.get("/logout",UserlogOut)
+router.get("/logout",isAuthenticated,UserlogOut)
 
 //Api Creation  using params/query
 
 
-router.get("/userId/:id",UserId)
+router.get("/userId/:id",isAuthenticated,UserId)
 
 
 //post Area
 router.post("/signup",UserSignup);
 
-router.post("/",Userlogin);
+router.post("/login",Userlogin);
 
 export default router;
