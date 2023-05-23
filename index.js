@@ -16,6 +16,7 @@ import cors from "cors";
 
 export const app=express();
 app.use(bodyParser.urlencoded({urlencoded:true}));
+app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
