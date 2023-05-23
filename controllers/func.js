@@ -77,7 +77,7 @@ export const UserId=async(req,res)=>{
 export const UserSignup=async(req,res)=>{
     console.log("signup");
     try {
-        const {name , email , password}=req.body;
+        const {name,email,password}=req.body;
         console.log(name,email,password);
     let item=await User.findOne({name:name,email:email});
     console.log(item);
