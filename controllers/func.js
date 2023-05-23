@@ -84,7 +84,7 @@ export const UserSignup=async(req,res)=>{
     if(item){
         return res.status(404).json({
             success:false,
-            message:"User Already Exist",
+            msg:"User Already Exist",
         })
     }
     const hashpassword=await bcrypt.hash(password,15);
@@ -96,7 +96,7 @@ export const UserSignup=async(req,res)=>{
         secure:process.env.NODE_URI==="Development"?false:true,
     }).json({
         success:true,
-        message:"User Created",
+        msg:"User Created",
     })
         
     } catch (error) {
