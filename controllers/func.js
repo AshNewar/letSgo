@@ -108,7 +108,8 @@ export const UserSignup=async(req,res)=>{
 export const Userlogin=async(req,res)=>{
     try {
         const {email,password}=req.body;
-    const item=await User.findOne({email:email,password:password});
+        console.log(email,password);
+    const item=await User.findOne({email:email});
     console.log(item);
     if(!item){
         return res.status(404).json({
