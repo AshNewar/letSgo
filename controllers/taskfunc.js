@@ -1,7 +1,9 @@
+import { log } from "console";
 import Task from "../models/task.js";
 
  export const newTask=async(req,res)=>{
-    const {title,desc}=req.body;
+    try {
+        const {title,desc}=req.body;
     await Task.create({
         title,desc,user:req.user,
     })
@@ -9,21 +11,36 @@ import Task from "../models/task.js";
         success:true,
         msg:"Created Task",
     })
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
 
  };
 
  export const myTask=async(req,res)=>{
-    console.log("hey");
+    try {
+        console.log("hey");
     const id=req.user._id;
     const datas=await Task.find({user:id});
     res.status(200).json({
         success:true,
         user:datas
     })
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
 
  }
  export const updateTask=async(req,res)=>{
-    const {id}=req.params;
+    try {
+
+        const {id}=req.params;
     const user=await Task.findById(id);
     if(!user){
         return res.status(404).json({
@@ -36,10 +53,17 @@ import Task from "../models/task.js";
     res.status(200).json({
         success:true,
     })
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
 
  }
  export const deleteTask=async(req,res)=>{
-    const {id}=req.params;
+    try {
+        const {id}=req.params;
     const user=await Task.findById(id);
     if(user){
         await user.deleteOne();
@@ -54,6 +78,12 @@ import Task from "../models/task.js";
         })
 
     }
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
 
     
     

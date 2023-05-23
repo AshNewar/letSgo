@@ -6,15 +6,22 @@ import bcrypt from "bcrypt";
 
 const loc=path.resolve();
 export const isAuthenticated=async(req,res,next)=>{
-    console.log("im here");
-    const {token}=req.cookies;
-    req.user=await User.findOne({_id:token});
-    if(token){
-        next();
+    try {
+        console.log("im here");
+        const {token}=req.cookies;
+        req.user=await User.findOne({_id:token});
+        if(token){
+            next();
+        }
+        else{
+            res.sendFile(path.join(loc,"./index.html"));
+        }
+            
+    } catch (error) {
+        console.log("error in 1");
+        
     }
-    else{
-        res.sendFile(path.join(loc,"./index.html"));
-    }
+    
 
 }
 
@@ -46,16 +53,25 @@ export const UserlogOut=(req,res)=>{
     res.redirect("/");
 };
 export const UserId=async(req,res)=>{
-    const {id}=req.params;
-    const user=await User.find({_id:id});
-    res.json({
-        success:true,
-        user,
-    })
+    try {
+        const {id}=req.params;
+        const user=await User.find({_id:id});
+        res.json({
+            success:true,
+            user,
+        })
+        
+    } catch (error) {
+        console.log(error);
+        console.log("eror2");
+        
+    }
+    
 };
 
 export const UserSignup=async(req,res)=>{
-    const {name,password}=req.body;
+    try {
+        const {name,password}=req.body;
     const item=await User.findOne({name});
     console.log(item);
     if(item){
@@ -80,9 +96,16 @@ export const UserSignup=async(req,res)=>{
         success:true,
         message:"User Created",
     })
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
 }
 export const Userlogin=async(req,res)=>{
-    const {name,password}=req.body;
+    try {
+        const {name,password}=req.body;
     const item=await User.findOne({name});
     console.log(item);
     if(!item){
@@ -111,6 +134,12 @@ export const Userlogin=async(req,res)=>{
 
         
     }
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
     
     
 
