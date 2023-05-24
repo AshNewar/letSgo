@@ -15,7 +15,7 @@ const taskSchema=new mongoose.Schema({
     },
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"abcs",
+        ref:"abc",
     },
     createdAt:{
         type:Date,
