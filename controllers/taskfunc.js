@@ -25,6 +25,7 @@ import Task from "../models/task.js";
         console.log("hey");
     const id=req.user._id;
     const datas=await Task.find({user:id});
+     console.log(datas,id);
     res.status(200).json({
         success:true,
         user:datas
