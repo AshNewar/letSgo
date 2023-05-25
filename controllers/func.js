@@ -91,7 +91,7 @@ export const UserSignup=async(req,res)=>{
     const user=await User.create({name:name,email:email,password:hashpassword});
     res.status(201).cookie("token",user._id,{
         httpOnly:true,
-        expires:new Date(Date.now()+(60*1000)),
+        maxAge: 30 * 60 * 1000,
         sameSite:process.env.NODE_URI==="Development"?"lax":"none",
         secure:process.env.NODE_URI==="Development"?false:true,
     }).json({
@@ -123,7 +123,7 @@ export const Userlogin=async(req,res)=>{
         if(isMatch){
             res.cookie("token",item._id,{
                 httpOnly:true,
-                expires:new Date(Date.now()+(60*1000)),
+                maxAge: 30 * 60 * 1000,
                 sameSite:process.env.NODE_URI==="Development"?"lax":"none",
                 secure:process.env.NODE_URI==="Development"?false:true,
             });
